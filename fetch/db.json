@@ -1,0 +1,38 @@
+{
+  "comandas": [
+    {
+      "id": 1,
+      "productos": [
+        {
+          "id": 1,
+          "nombre": "Plato",
+          "precio": 2,
+          "unidad": 1
+        },
+        {
+          "nombre": "foo",
+          "precio": 10,
+          "unidad": 1,
+          "id": 2
+        }
+      ],
+      "date": "24/02/202020 12:45"
+    },
+    {
+      "productos": [
+        {
+          "nombre": "sss",
+          "precio": "111",
+          "unidad": 1
+        },
+        {
+          "nombre": "ssssss",
+          "precio": "1111",
+          "unidad": 1
+        }
+      ],
+      "date": "24/02/202020 12:47",
+      "id": 2
+    }
+  ]
+}
