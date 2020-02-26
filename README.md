@@ -16,7 +16,7 @@ npm run serve
 npm install -g json-server
 ```
 
-### Lo conectamos con un archivo Json
+### Lo conectamos con el archivo Json
 ```
 json-server --watch db.json
 ```
