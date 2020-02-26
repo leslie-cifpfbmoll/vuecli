@@ -1,24 +1,23 @@
 # vuecli
 
-## Project setup
+## Abrimos el directorio
 ```
-npm install
+cd nomdelprojecto
+
 ```
 
-### Compiles and hot-reloads for development
+### Ejecutamos el servidor
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### En el caso de no tener JsonServer 
 ```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
+npm install -g json-server
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Lo conectamos con un archivo Json
+```
+json-server --watch db.json
+```
+
