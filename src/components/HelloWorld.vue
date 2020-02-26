@@ -25,16 +25,28 @@
             </li>
           </ul>
           <h4>Total: {{ totalProductos }} €</h4>
-          <button v-on:click="createComanda()">Crear comanda</button>
+          <button v-if="update === ''" v-on:click="createComanda()">Crear comanda</button>
+          <button v-else v-on:click="updateComanda(idcomanda)">Actualizar comanda</button>
         </div>
       </div>
       <div class="col-md-5 col-12">
-         <div>
-    {{ today }}
-  </div>
+        <div></div>
         <h2>Comandas</h2>
-  
-        <div id="response">{{mostrarComanda()}}</div>.
+
+        <div class="comanda" v-for="comanda in comandas" :key="comanda.id">
+          <span>Comanda: {{ comanda.id }} - {{ comanda.date }}</span>
+          <button v-on:click="deleteComanda(comanda.id)">Borrar</button>
+          <button v-on:click=" idComanda(comanda.id)">Actualizar</button>
+          <ul>
+            <li v-for="producto in comanda.productos" :key="producto.id">
+              <span>{{ producto.nombre }}</span>
+              <span>{{ producto.precio }}€ x</span>
+              <span>{{ producto.unidad }}</span>
+              <span>uds. = {{ producto.unidad * producto.precio }}</span>
+            </li>
+          </ul>
+          <h4>Total: {{ comanda.total }}</h4>
+        </div>
       </div>
     </div>
   </div>
@@ -53,7 +65,11 @@ export default {
       productos: [],
       nombre: "",
       precio: "",
-      today:moment().format("DD/MM/YYY HH:mm")
+      today: moment().format("DD/MM/YYY HH:mm"),
+      comandas: [],
+      total: 0,
+      update: "",
+      idcomanda: 0
     };
   },
   methods: {
@@ -63,6 +79,8 @@ export default {
         precio: this.precio,
         unidad: 1
       });
+     
+     
     },
     borrar: function(index) {
       this.productos.splice(index, 1);
@@ -70,7 +88,13 @@ export default {
     totalProducto: function(index) {
       return this.productos[index].precio * this.productos[index].unidad;
     },
-    
+
+    deleteComanda: function(index) {
+      var myurl = "http://localhost:3000/comandas";
+      fetch(myurl + "/" + index, {
+        method: "DELETE"
+      }).then(this.mostrarComanda);
+    },
     createComanda: function() {
       var total = [];
       for (var i = 0; i < this.productos.length; i++) {
@@ -85,47 +109,65 @@ export default {
         method: "POST",
         body: JSON.stringify({
           productos: total,
-          date:this.today
-
+          date: this.today,
+          total: this.totalProductos
         }),
         headers: {
           "Content-type": "application/json; charset=UTF-8"
         }
       })
         .then(response => response.json())
-        .then(json => console.log(json));
-        this.mostrarComanda();
+        .then(json => console.log(json))
+        .then(this.mostrarComanda);
+
+      this.productos = [];
     },
     mostrarComanda: function() {
-      var text = "";
-      var total=0;
+      let vm = this;
+
       fetch("http://localhost:3000/comandas")
         .then(response => response.json())
         .then(function(json) {
-          text += "<div>";
-         
-          for (var i = 0; i < json.length; i++) {
-            text += "<p>Comanda " + json[i].id+" - "+ json[i].date + " <button>Borrar</button><button>Editar</button></p><ul>";
-             total=0;
-            for (var x = 0; x < json[i].productos.length; x++) {
-              text += "<li> Producto: " + json[i].productos[x].nombre;
-              text += " Precio:  " + json[i].productos[x].precio;
-              text += "x :  " + json[i].productos[x].unidad + " = ";
-              text +=
-                json[i].productos[x].precio * json[i].productos[x].unidad +
-                "</li>";
-                total+=  json[i].productos[x].precio * json[i].productos[x].unidad
-            }
-            text += "</ul><p>Total de la comanda: "+total+"</p>";
-          }
-
-          text += "</div>";
-       
-           document.getElementById("response").innerHTML = text;
-        
+          vm.comandas = json;
         });
-     
+    },
+    updateComanda: function(index) {
+      var total = [];
+      for (var i = 0; i < this.productos.length; i++) {
+        total.push({
+          nombre: this.productos[i].nombre,
+          precio: this.productos[i].precio,
+          unidad: this.productos[i].unidad
+        });
+      }
+      fetch("http://localhost:3000/comandas/" + index, {
+        method: "PUT",
+        body: JSON.stringify({
+          productos: total,
+          date: this.today,
+          total: this.totalProductos
+        }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      })
+        .then(response => response.json())
+        .then(json => console.log(json))
+        .then((this.productos = [])).then(this.mostrarComanda).then(this.update="");
+    },
+    idComanda: function(index) {
+      let vm = this;
+      vm.update = "si";
+      fetch("http://localhost:3000/comandas/" + index)
+        .then(response => response.json())
+        .then(function(json) {
+          vm.productos = json.productos;
+          vm.idcomanda = json.id;
+        });
     }
+  },
+  mounted() {
+    this.mostrarComanda();
   },
   computed: {
     totalProductos: function() {
@@ -161,7 +203,8 @@ a {
 span {
   margin: 5px;
 }
-.list {
+
+.comanda {
   border: solid 1px #2c3e50;
   padding: 15px;
 }

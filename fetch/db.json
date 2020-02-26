@@ -1,38 +1,38 @@
 {
   "comandas": [
     {
-      "id": 1,
       "productos": [
         {
-          "id": 1,
-          "nombre": "Plato",
-          "precio": 2,
-          "unidad": 1
-        },
-        {
-          "nombre": "foo",
-          "precio": 10,
-          "unidad": 1,
-          "id": 2
+          "nombre": "aaa",
+          "precio": "222",
+          "unidad": "4"
         }
       ],
-      "date": "24/02/202020 12:45"
+      "date": "26/02/202020 17:53",
+      "total": 888,
+      "id": 4
     },
     {
       "productos": [
         {
-          "nombre": "sss",
-          "precio": "111",
+          "nombre": "ssss",
+          "precio": "222",
           "unidad": 1
         },
         {
-          "nombre": "ssssss",
-          "precio": "1111",
+          "nombre": "sssssss",
+          "precio": "222",
+          "unidad": "2"
+        },
+        {
+          "nombre": "ssssssaa",
+          "precio": "22",
           "unidad": 1
         }
       ],
-      "date": "24/02/202020 12:47",
-      "id": 2
+      "date": "26/02/202020 17:54",
+      "total": 688,
+      "id": 5
     }
   ]
 }
